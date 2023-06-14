@@ -1,4 +1,4 @@
-#Dall-E Clone
+# Dall-E Clone
 
 This project is a clone of Dall-E implemented using the MERN stack (MongoDB, Express, React, Node.js). The Dall-E Clone allows users to generate images by providing textual descriptions using the famous OpenAI machine learning model.
 
