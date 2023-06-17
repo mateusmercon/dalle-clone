@@ -60,9 +60,9 @@ const CreatePost = () => {
     e.preventDefault();
 
     if (form.prompt && form.photo) {
-      try {
-        setLoading(true);
+      setLoading(true);
 
+      try {
         const response = await fetch('http://localhost:8080/api/v1/post', {
           method: 'POST',
           headers: {
@@ -95,7 +95,7 @@ const CreatePost = () => {
         <h1 className="font-extrabold text-[#222328] text-[32px]">
           Create
         </h1>
-        <p className='mt-2 text-[#666e75] text-[16px] max-w-[500px]'>
+        <p className='mt-2 text-[#666e75] text-[16px]'>
         Generate an imaginative image through DALL-E AI and share it with the community
         </p>
       </div>
