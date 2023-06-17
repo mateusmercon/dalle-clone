@@ -11,6 +11,7 @@ const FormField = ({
   handleSurpriseMe,
 }) => (
   <div>
+
     <div className="flex items-center gap-2 mb-2">
       <label
         htmlFor={name}
@@ -18,6 +19,7 @@ const FormField = ({
       >
         {labelName}
       </label>
+      
       {isSurpriseMe && (
         <button
           type="button"
@@ -28,6 +30,7 @@ const FormField = ({
         </button>
       )}
     </div>
+
     <input
       type={type}
       id={name}
@@ -38,6 +41,7 @@ const FormField = ({
       onChange={handleChange}
       required
     />
+
   </div>
 );
 

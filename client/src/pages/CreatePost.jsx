@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { preview } from '../assets'
-import { getRandomPrompt } from '../utils'
-import {FormField , Loader} from '../components'
+import { preview } from '../assets';
+import { getRandomPrompt } from '../utils';
+import { FormField, Loader } from '../components';
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -13,8 +13,18 @@ const CreatePost = () => {
     prompt: '',
     photo: '',
   });
+
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSurpriseMe = () => {
+    const randomPrompt = getRandomPrompt(form.prompt);
+    setForm({ ...form, prompt: randomPrompt });
+  };
 
   const generateImage = async () => {
     if (form.prompt) {
@@ -32,15 +42,19 @@ const CreatePost = () => {
         const data = await response.json();
 
         setForm({ ...form, photo: `data:image/jpeg;base64,${data.photo}` });
+
       } catch (error) {
         alert(error);
-      } finally { 
+
+      } finally {
         setGeneratingImg(false);
-      }
+      };
+
     } else {
       alert('Please enter a prompt');
-    }
-  }
+    };
+
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,42 +68,35 @@ const CreatePost = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({form}),
-        })
+          body: JSON.stringify({ ...form }),
+        });
 
         await response.json();
         navigate('/');
       
       } catch (error) {
         alert(error);
+
       } finally {
         setLoading(false);
-      }
+
+      };
+
     } else {
       alert('Please enter a prompt and generate an image');
-    }
+    };
 
-  }
+  };
   
-
-  const handleChange = (e) => { 
-    setForm({...form, [e.target.name]: e.target.value})    
-  }
-
-  const handleSurpriseMe = () => {
-    const randomPrompt = getRandomPrompt(form.prompt);
-    setForm({ ...form, prompt: randomPrompt });
-  }
-  
-
   return (
     <section className='max-w-7xl mx-auto'>
+
       <div>
         <h1 className="font-extrabold text-[#222328] text-[32px]">
-          The Community Showcase
+          Create
         </h1>
         <p className='mt-2 text-[#666e75] text-[16px] max-w-[500px]'>
-          Create imaginative and visually stunning images through DALL-E AI and share then with the Community.
+        Generate an imaginative image through DALL-E AI and share it with the community
         </p>
       </div>
 
@@ -128,7 +135,6 @@ const CreatePost = () => {
                   className="w-9/12 h-9/12 object-contain opacity-40"
                 />  
             )}
-
             {generatingImg && (
               <div className='absolute inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)] rounded-lg'>
                 <Loader />
@@ -159,6 +165,7 @@ const CreatePost = () => {
           </button>
         </div>
       </form>
+
     </section>
   )
 }

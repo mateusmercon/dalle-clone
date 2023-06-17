@@ -1,68 +1,60 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 
-import { Loader, Card, FormField } from '../components'
+import { Loader, Card, FormField } from '../components';
 
 const RenderCards = ({ data, title }) => {
     if (data?.length > 0) {
-        return (
-            data.map((post) => { 
-                return (
-                    <Card key={post._id} {...post} />
-                )
-            })
-        )
-    }
+        return (data.map((post) => <Card key={post._id} {...post} />));
+    };
 
     return (
         <h2 className='mt-5 font-bold text-[#6449ff] text-x1 uppercase'>
-           {title}
+            {title}
         </h2>
-    )
- }
+    );
+};
 
 const Home = () => {
-    const [loading, setLoading] = useState(false)
-    const [allPosts, setAllPosts] = useState(null)
+    const [loading, setLoading] = useState(false);
+    const [allPosts, setAllPosts] = useState(null);
 
-    const [searchText, setSearchText] = useState('')
-    
-    const [searchedResults, setSearchedResults] = useState(null)
-    const [searchTimeout, setSearchTimeout] = useState(null)
+    const [searchText, setSearchText] = useState('');
+    const [searchedResults, setSearchedResults] = useState(null);
+    const [searchTimeout, setSearchTimeout] = useState(null);
+
+    const fetchPosts = async () => {
+        setLoading(true);
+        
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/post', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                setAllPosts(result.data.reverse());
+            };
+            
+        } catch (error) {
+            alert(error);
+
+        } finally {
+            setLoading(false)
+
+        };
+    };
 
     useEffect(() => {
-        const fetchPost = async () => {
-            setLoading(true)
-            
-            try {
-                const response = await fetch('http://localhost:8080/api/v1/post', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-
-                if (response.ok) {
-                    const result = await res.json()
-
-                    setAllPosts(result.data.reverse())
-                }
-                
-            } catch (error) {
-                alert(error)
-            
-            } finally {
-                setLoading(false)
-            
-            }
-        
-        }
-    
-    }, [])
+        fetchPosts();
+    }, []);
     
     const handleSearchChange = (e) => {
-        clearTimeout(searchTimeout)
+        clearTimeout(searchTimeout);
 
-        setSearchText(e.target.value)
+        setSearchText(e.target.value);
 
         setSearchTimeout(
             setTimeout(() => {
@@ -71,14 +63,16 @@ const Home = () => {
     
                     setSearchedResults(searchResults)
     
-                })
+                });
             }, 500)
-        )
+            
+        );
         
-    }
+    };
  
     return (
         <section className='max-w-7xl mx-auto'>
+
             <div>
                 <h1 className="font-extrabold text-[#222328] text-[32px]">
                     The Community Showcase
@@ -105,7 +99,7 @@ const Home = () => {
                         <div className="flex justify-center items-center">
                             <Loader />
                         </div>
-                    ):(
+                    ) : (
                         <>
                             {searchText && (
                                 <h2 className='font-medium text-[#666e75] text-1xl mb-3'>
@@ -120,21 +114,21 @@ const Home = () => {
                                             data={searchedResults}
                                             title='No search results found'
                                         />
-                                    ):(
-                                            <RenderCards
-                                                data={allPosts}
-                                                title='No posts found'
-                                            />          
-                                  )  
+                                    ) : (
+                                        <RenderCards
+                                            data={allPosts}
+                                            title='No posts found'
+                                        />
+                                    )
                                 }
                             </div>
                         </>
                     )
                 }
-
             </div>
-        </section>
-    )
-}
 
-export default Home
+        </section>
+    );
+};
+
+export default Home;

@@ -12,18 +12,19 @@ cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+});
 
 router.route('/').get(async (req, res) => {
     try {
         const posts = await Post.find({});
-
-        res.status(200).json({ success: true, data: posts })
+        res.status(200).json({ success: true, data: posts });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error })
-    }
- })
+        res.status(500).json({ success: false, message: error });
+
+    };
+
+});
 
 router.route('/').post(async (req, res) => {
     try {
@@ -34,12 +35,23 @@ router.route('/').post(async (req, res) => {
             name,
             prompt,
             photo: photoUrl.url,
-        })
+        });
 
-        res.status(201).json({ success: true, data: newPost })
+        newPost.save()
+            .then(() => {
+                console.log('Image data saved to MongoDB');
+            })
+            .catch(err => {
+                console.error('Error saving image data to MongoDB:', err);
+            });
+
+        res.status(200).json({ success: true, data: newPost });
+        console.log("sucess")
+
     } catch (error) {
-        res.status(500).json({ success: false, message: error })
-    }
+        res.status(500).json({ success: false, message: 'Unable to create a post, please try again' })
+
+    };
 
 });
 

@@ -17,20 +17,25 @@ app.use('/api/v1/post', postRoutes);
 app.use('/api/v1/dalle', dalleRoutes);
 
 app.get('/', async (req, res) => {
-    res.send('Hello from DALL-E!');
-})
+    res.status(200).json({
+        message: 'Hello from DALL.E!',
+    });
+
+});
 
 const startServer = async () => {
     try {
         connectDB(process.env.MONGODB_URL);
+        
         app.listen(process.env.PORT, () => {
             console.log(`Server is running on http://localhost:${process.env.PORT}`);
         });
+
     } catch (error) {
         console.log(error);
-    }
 
+    };
 
-}
+};
 
 startServer();
